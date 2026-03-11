@@ -40,7 +40,7 @@ jobs:
 
       - uses: actions/github-script@v7
         env:
-          ISSUE_NUMBER: ${{ inputs.issue_number || github.event.number }}
+          ISSUE_NUMBER: ${{ github.event.inputs.issue_number || github.event.number || 1 }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_REF_NAME: ${{ inputs.ref || github.ref_name }}
         with:
@@ -50,7 +50,7 @@ jobs:
             const fs = require('fs');
             const path = require('path');
 
-            const issueNumber = parseInt(process.env.ISSUE_NUMBER) || 1;
+            const issueNumber = parseInt(process.env.ISSUE_NUMBER);
             const repo = process.env.GITHUB_REPOSITORY;
             const branch = process.env.GITHUB_REF_NAME || 'main';
 
@@ -236,7 +236,7 @@ jobs:
 
               const outputDir = './screenshots';
               fs.mkdirSync(outputDir, { recursive: true });
-              const screenshotPath = path.join(outputDir, `issue-${issueNumber}.png`);
+              const screenshotPath = path.join(outputDir, 'preview.png');
 
               await page.screenshot({ path: screenshotPath, fullPage: true, type: 'png' });
               core.info(`Screenshot saved: ${screenshotPath}`);
@@ -246,7 +246,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: issue-${{ inputs.issue_number || github.event.number }}-preview
-          path: ./screenshots/issue-${{ inputs.issue_number || github.event.number }}.png
+          name: preview
+          path: ./screenshots/preview.png
           retention-days: 30
           if-no-files-found: error
