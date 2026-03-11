@@ -48,7 +48,6 @@ jobs:
             const { marked } = require('marked');
             const fs = require('fs');
             const path = require('path');
-            const core = require('@actions/core');
 
             const issueNumber = parseInt(process.env.ISSUE_NUMBER);
             const repo = process.env.GITHUB_REPOSITORY;
