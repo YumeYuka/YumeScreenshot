@@ -9,8 +9,9 @@ on:
     inputs:
       issue_number:
         description: 'Issue/PR number to generate preview for'
-        required: true
+        required: false
         type: number
+        default: 1
       ref:
         description: 'Branch or ref to use for relative image paths'
         required: false
@@ -49,14 +50,9 @@ jobs:
             const fs = require('fs');
             const path = require('path');
 
-            const issueNumber = parseInt(process.env.ISSUE_NUMBER);
+            const issueNumber = parseInt(process.env.ISSUE_NUMBER) || 1;
             const repo = process.env.GITHUB_REPOSITORY;
             const branch = process.env.GITHUB_REF_NAME || 'main';
-
-            if (!issueNumber || isNaN(issueNumber)) {
-              core.setFailed('Invalid issue number');
-              return;
-            }
 
             core.info(`Generating preview for #${issueNumber}`);
 
